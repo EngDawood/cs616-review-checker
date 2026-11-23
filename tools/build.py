@@ -56,8 +56,8 @@ Topic comes from the command used (`/check-t19`, `/check-t34`), the user's words
    - Results/Discussion: RQ1–RQ3 each answered explicitly? Anticipated vs actual outcomes? Compared with prior reviews? Limitations incl. review bias?
    - Conclusion: nothing new; future work?
    - Tone: formal third person; topic sentences; acronyms defined.
-4. **Compose the report** with `references/common/report-template.md`: verdict (READY / NOT READY — rule in the rubric), blocking FAILs, WARNs, the judgement table (J-items + topic items), MANUAL items, what passes, fix order, section word-count table.
-5. **Offer a re-check** after fixes.
+4. **Compose the report** with `references/common/report-template.md`; give every FAIL/WARN/NOT MET/PARTLY a **How to fix** direction from `references/common/revision-guidance.md` (directions only, never replacement text). Include: verdict (READY / NOT READY — rule in the rubric), blocking FAILs, WARNs, the judgement table (J-items + topic items), MANUAL items, what passes, revision plan, section word-count table.
+5. **Offer a re-check** after fixes. If the student asks "how do I fix X?" or for a revision plan, answer from `revision-guidance.md` (what to change, where, how to verify, in the suggested order) and still do not write the text for them.
 
 ## Always list as MANUAL
 Similarity < 20 % (Turnitin/SafeAssign) · no AI-generated text / the instructor's permitted-use policy · sources really read, nothing fabricated · venue quality (Q1/Q2, CORE A/B, Scopus/WoS, no predatory venues) · table values faithful to sources · topic locked with the instructor, no self-plagiarism.
@@ -70,7 +70,7 @@ Similarity < 20 % (Turnitin/SafeAssign) · no AI-generated text / the instructor
 
 ## Files
 - `scripts/check_paper.py` — the engine (`--topic` selects the profile).
-- `references/common/` — `requirements-common.md` (every Type A requirement with check IDs + sources), `judgement-rubric.md` (verdict criteria for everything that needs reading), `report-template.md`, `guidelines.md` (course Guidelines as Markdown).
+- `references/common/` — `requirements-common.md` (every Type A requirement with check IDs + sources), `judgement-rubric.md` (verdict criteria for everything that needs reading), `revision-guidance.md` (how to tell the student what to change, without writing it), `report-template.md`, `guidelines.md` (course Guidelines as Markdown).
 - `references/topics/t19/` and `references/topics/t34/` — each: `topic-N.md` (Handbook Track A + what is checked), `judgement-N.md` (topic-specific reading checks) and `handbook-excerpt.md` (Review-track standard + that topic's entry).
 '''
 
@@ -98,7 +98,7 @@ def build():
     shutil.copy(os.path.join(ROOT, "engine", "check_paper.py"), os.path.join(sk, "scripts", "check_paper.py"))
     common = os.path.join(sk, "references", "common")
     os.makedirs(common)
-    for f in ("requirements-common.md", "report-template.md", "judgement-rubric.md"):
+    for f in ("requirements-common.md", "report-template.md", "judgement-rubric.md", "revision-guidance.md"):
         shutil.copy(os.path.join(ROOT, "shared-references", f), common)
     shutil.copy(os.path.join(ROOT, "source-docs", "01-research-paper-guidelines.md"), os.path.join(common, "guidelines.md"))
     hb = open(os.path.join(ROOT, "source-docs", "03-two-track-handbook-full.md"), encoding="utf-8").read()

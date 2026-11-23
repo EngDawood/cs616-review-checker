@@ -10,7 +10,7 @@ Never include rewritten paper text, suggested sentences or "improved" paragraphs
 READY / NOT READY — <one line>.  Counts: FAIL n · WARN n · MANUAL n.
 
 ## Blocking (FAIL) — fix before submission
-1. [ID] requirement (source) — evidence (file:line / number) — what to do.
+1. [ID] requirement (source) — evidence (file:line / number) — **How to fix** (direction from `revision-guidance.md`, effort quick/medium/heavy).
 
 ## Should fix (WARN)
 1. [ID] … (note any that the script flagged but you judged to be false positives, and why)
@@ -25,6 +25,6 @@ Short list of the strongest passes (word count, template, reference count …).
 | Item | Verdict (MET/PARTLY/NOT MET/CAN'T TELL) | Evidence (section, file:line) | What is missing |
 |---|---|---|---|
 
-## Fix order
-1 … 2 … 3 …   (cheapest blocking fixes first)
+## Revision plan
+Ordered per `revision-guidance.md` §Order of work: 1 … 2 … 3 …  (each step: where → action → how to verify; no replacement text)
 ```
