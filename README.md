@@ -23,7 +23,7 @@ Everything is derived from the three course PDFs (extracted to Markdown in [`sou
 
 Full ID-by-ID list: [`shared-references/requirements-common.md`](shared-references/requirements-common.md).
 
-> **Two modes.** `/check-t19` · `/check-t34` audit the paper and say what and where to fix. `/fix-t19` · `/fix-t34` revise a copy of the paper and return the edited files plus a change log; Claude can change anything in the paper the user asks for, not only what the check found. Fix mode never invents references, numbers or findings; it leaves `TODO(student)` markers instead.
+> **Two modes.** `/check-t19` · `/check-t34` audit the paper and say what and where to fix. `/fix-t19` · `/fix-t34` revise a copy of the paper and return the edited files plus a change log; Claude edits whatever the user asks for in the paper (the user's request decides), not only what the check found, at any point in the conversation. Fix mode never invents references, numbers or findings; it leaves `TODO(student)` markers instead.
 
 ## Install
 **Claude Code**
