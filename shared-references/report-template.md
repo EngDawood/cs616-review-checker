@@ -21,8 +21,9 @@ Similarity < 20 %, no AI-generated text, sources actually read, venue quality, t
 ## What already meets the requirements
 Short list of the strongest passes (word count, template, reference count …).
 
-## Judgement calls from reading the paper (not machine-checkable)
-Abstract completeness · gap analysis quality · synthesis vs. summary · table accuracy spot-check · anticipated-vs-actual · contribution vs. prior SLRs.
+## Judgement table (rubric J1–J18 + topic items)
+| Item | Verdict (MET/PARTLY/NOT MET/CAN'T TELL) | Evidence (section, file:line) | What is missing |
+|---|---|---|---|
 
 ## Fix order
 1 … 2 … 3 …   (cheapest blocking fixes first)

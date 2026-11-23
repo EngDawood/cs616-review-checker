@@ -33,7 +33,7 @@ Topic comes from the command used (`/check-t19`, `/check-t34`), the user's words
    python3 scripts/check_paper.py <path> --topic <19|34>        # readable table
    ```
    `--stage draft` for the Week-9 draft (length/ref-count FAILs become WARN); default `final` (Week 13). `--main <file>` if auto-detect picks the wrong main file. Exit code 1 = at least one FAIL.
-3. **Read the paper** (`main.tex` + `\input` files) section by section and judge what no script can, using `references/common/requirements-common.md` and `references/topics/tN/topic-N.md`:
+3. **Read the paper** (`main.tex` + `\input` files) section by section and judge what no script can. Apply `references/common/judgement-rubric.md` (items J1–J18) **and** the topic's own `references/topics/tN/judgement-N.md`; give each item a verdict MET / PARTLY / NOT MET / CAN'T TELL with section + file:line evidence and what is missing (never replacement text). Requirements and IDs: `references/common/requirements-common.md`, `references/topics/tN/topic-N.md`. Prompts to keep in mind:
    - Abstract: problem, approach, single key finding?
    - Introduction: context/why it matters, problem, RQs, contribution, one-sentence organisation?
    - Related work: grouped by theme and critiqued — or a list of summaries? Ends with the gap?
@@ -42,7 +42,7 @@ Topic comes from the command used (`/check-t19`, `/check-t34`), the user's words
    - Results/Discussion: RQ1–RQ3 each answered explicitly? Anticipated vs actual outcomes? Compared with prior reviews? Limitations incl. review bias?
    - Conclusion: nothing new; future work?
    - Tone: formal third person; topic sentences; acronyms defined.
-4. **Compose the report** with `references/common/report-template.md`: verdict (READY / NOT READY), blocking FAILs, WARNs, MANUAL items, what passes, judgement calls, fix order, section word-count table.
+4. **Compose the report** with `references/common/report-template.md`: verdict (READY / NOT READY — rule in the rubric), blocking FAILs, WARNs, the judgement table (J-items + topic items), MANUAL items, what passes, fix order, section word-count table.
 5. **Offer a re-check** after fixes.
 
 ## Always list as MANUAL
@@ -56,5 +56,5 @@ Similarity < 20 % (Turnitin/SafeAssign) · no AI-generated text / the instructor
 
 ## Files
 - `scripts/check_paper.py` — the engine (`--topic` selects the profile).
-- `references/common/` — `requirements-common.md` (every Type A requirement with check IDs + sources), `report-template.md`, `guidelines.md` (course Guidelines as Markdown).
-- `references/topics/t19/` and `references/topics/t34/` — each: `topic-N.md` (Handbook Track A + what is checked) and `handbook-excerpt.md` (Review-track standard + that topic's entry).
+- `references/common/` — `requirements-common.md` (every Type A requirement with check IDs + sources), `judgement-rubric.md` (verdict criteria for everything that needs reading), `report-template.md`, `guidelines.md` (course Guidelines as Markdown).
+- `references/topics/t19/` and `references/topics/t34/` — each: `topic-N.md` (Handbook Track A + what is checked), `judgement-N.md` (topic-specific reading checks) and `handbook-excerpt.md` (Review-track standard + that topic's entry).
