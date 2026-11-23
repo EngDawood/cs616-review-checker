@@ -5,7 +5,7 @@ Run from the repo root:  python3 tools/build.py
 import json, os, re, shutil, zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 NAME = "cs616-review-checker"
 TOPICS = {
   "19": dict(title="Version- and State-Robust Forensics of Encrypted Messaging Applications", cmd="check-t19"),
