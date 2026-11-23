@@ -16,7 +16,7 @@ READY / NOT READY — <one line>.  Counts: FAIL n · WARN n · MANUAL n.
 1. [ID] … (note any that the script flagged but you judged to be false positives, and why)
 
 ## Needs a human check (MANUAL)
-Similarity < 20 %, no AI-generated text, sources actually read, venue quality, table values true to sources …
+Similarity < 20 %, sources actually read, venue quality, table values true to sources …
 
 ## What already meets the requirements
 Short list of the strongest passes (word count, template, reference count …).

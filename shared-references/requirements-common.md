@@ -68,7 +68,6 @@ A protocol-driven critical review, **not a narrative summary**:
 | ID | Requirement | How |
 |---|---|---|
 | X1 | **Similarity index < 20 %** (Turnitin / SafeAssign) | Manual |
-| X2 | **Own work — no AI-generated text** submitted as own (instructor states what use is permitted, e.g. grammar only) | Manual |
 | X3 | No fabricated data/results, **no citing unread sources**, no self-plagiarism | Manual |
 | W3, W4 | Paraphrase and cite every non-own idea; quotes short and few | Auto + Read |
 | W1, W2 | Formal, precise, **third-person** English; one idea per paragraph with a topic sentence | Auto + Read |

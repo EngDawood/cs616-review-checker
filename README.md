@@ -19,7 +19,7 @@ Everything is derived from the three course PDFs (extracted to Markdown in [`sou
 - **Review method (Guidelines §2.1 + Handbook "Review track")** — bounded RQs, databases, reproducible search string, time window, inclusion/exclusion, **PRISMA flow**, corpus size, taxonomy, **comparison matrix**, **quality appraisal**, gap analysis, scope/bias/limitations, anticipated vs actual outcomes.
 - **Topic coverage** — the topic's RQ1–RQ3, search protocol, matrix columns and anchor sources ([topic 19](topic-specs/topic-19.md), [topic 34](topic-specs/topic-34.md)).
 - **References** — ≥ 15, majority peer-reviewed and recent, IEEE numbered, all cited ↔ all listed, no blogs/Wikipedia, entry completeness, access dates.
-- **Writing/integrity** — third person, quotes, uncited long paragraphs; and a **MANUAL** list of what no tool can verify (Turnitin < 20 %, no AI-written text, sources actually read, venue quality).
+- **Writing/integrity** — third person, quotes, uncited long paragraphs; and a **MANUAL** list of what no tool can verify (Turnitin < 20 %, sources actually read, venue quality).
 
 Full ID-by-ID list: [`shared-references/requirements-common.md`](shared-references/requirements-common.md).
 

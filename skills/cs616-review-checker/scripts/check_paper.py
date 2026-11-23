@@ -647,7 +647,6 @@ def main():
     # ---- 10. manual items -----------------------------------------------------------
     for fid, req, src in [
         ("X1", "Similarity index < 20% (Turnitin / SafeAssign) - cannot be measured here", G + " §6 Plagiarism"),
-        ("X2", "Work is the student's own - no AI-generated text submitted as own writing; check the instructor's policy on permitted use", G + " §6"),
         ("X3", "Sources were actually read (no citing unread papers); no fabricated findings in the comparison table", G + " §6 Also prohibited"),
         ("X4", "Venue quality of cited sources (Q1/Q2 by JCR/SJR, CORE A/B), indexing in Scopus/WoS, no predatory journals", G + " §5.1"),
         ("X5", "Comparison-table cell values are true to the cited primary studies (spot-check 3-5 rows)", H + " Review track"),

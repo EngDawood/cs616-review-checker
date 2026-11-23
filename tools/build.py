@@ -61,7 +61,7 @@ Topic comes from the command used (`/check-t19`, `/check-t34`), the user's words
 6. **Fix mode** (only when asked): copy the source to a working folder; fix blocking FAILs first, then the order in `revision-guidance.md`; keep the IEEE template intact; compile-check labels/refs; re-run the engine on the revised copy and show before/after counts; deliver the revised `.tex`/`.bib` (or zip) and `CHANGES.md` listing every edit (ID, location, what changed) and every `TODO(student)` left. Do not claim the revised paper is ready until the MANUAL items are done.
 
 ## Always list as MANUAL
-Similarity < 20 % (Turnitin/SafeAssign) · no AI-generated text / the instructor's permitted-use policy · sources really read, nothing fabricated · venue quality (Q1/Q2, CORE A/B, Scopus/WoS, no predatory venues) · table values faithful to sources · topic locked with the instructor, no self-plagiarism.
+Similarity < 20 % (Turnitin/SafeAssign) · sources really read, nothing fabricated · venue quality (Q1/Q2, CORE A/B, Scopus/WoS, no predatory venues) · table values faithful to sources · topic locked with the instructor, no self-plagiarism.
 
 ## Mention once, if relevant
 - Topic Catalogue: proposal Week 4; Guidelines: Week 8.
