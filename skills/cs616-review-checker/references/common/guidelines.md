@@ -8,7 +8,7 @@ Research Paper — Guidelines & Structure
 
 How to plan, write, reference, and submit your paper. Your instructor will discuss each part in class.
 
-At a glance. The research paper is an individual piece of work (worth 15% of the course). You will write it in IEEE two-column format, roughly 5,000–6,000 words excluding references (±10%; your instructor will confirm the exact count). You may write either a review paper or an implementation / experimental paper (see §2). The similarity score must be below 20%, and the work must be your own — not AI-generated (§7). Read this whole guide before you start.
+At a glance. The research paper is an individual piece of work (worth 15% of the course). You will write it in IEEE two-column format, roughly 5,000–6,000 words excluding references (±10%; your instructor will confirm the exact count). You may write either a review paper or an implementation / experimental paper (see §2). The similarity score must be below 20%, and the work must be your own (§7). Read this whole guide before you start.
 
 # 1. Purpose of the paper
 
@@ -98,7 +98,6 @@ Research Paper — Guidelines
 
 - **Plagiarism:** presenting others' words or ideas as your own. **Paraphrase** in your own words *and cite the source*; use **quotation marks** for the rare direct quote (keep quotes short and few). Every idea that is not yours needs a citation.
 - **Similarity limit:** your submission will be checked (e.g. Turnitin/SafeAssign). The similarity index must be **below 20%**. High similarity — even if cited — signals over-quoting or poor paraphrasing; rewrite in your own words.
-- **No AI-generated work:** text produced by an AI tool and submitted as your own is an **integrity violation**, treated the same as plagiarism. The analysis and the writing must be yours. (Your instructor will state the exact policy on any permitted use, e.g. for grammar checking only.)
 - **Also prohibited:** fabricating data or results; citing sources you did not read; and re-submitting your own past work (self-plagiarism).
 
 ## 7. Writing guidance (for first-time authors)
@@ -133,7 +132,7 @@ A clear, focused question; genuine synthesis or a reproducible experiment (not a
 ☐ Anticipated outcomes stated (and, in the final, compared to actual).
 ☐ ≥15 references, recent and peer-reviewed; all cited in text; IEEE numbering.
 ☐ Every acronym defined; every figure/table captioned and referenced.
-☐ Paraphrased and cited; similarity <20%; your own work (no AI-generated text).
+☐ Paraphrased and cited; similarity <20%; your own work.
 ☐ Proofread.
 
 3 of 3
