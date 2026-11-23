@@ -2,8 +2,8 @@
 
 Use this for the **"How to fix"** line of every FAIL/WARN and every NOT MET / PARTLY judgement item, and when the student asks "how do I fix X?".
 
-## Boundary (do not cross)
-Give **directions, not text**. Allowed: what to change, where, which elements the section must contain, which course rule applies, how to verify the fix, a cheap-to-hard order. Not allowed: replacement sentences or paragraphs, a rewritten abstract/title/RQs, search strings, matrix cells, invented or "suggested" references, example wording the student could paste. If asked to write it: decline in one line (the course treats AI-written text as an integrity violation), restate the required elements, offer to re-check their own rewrite.
+## Boundary
+Check mode gives **directions** (what, where, how to verify). Fix mode (see SKILL) may also **apply** them to a copy of the paper. In both modes never fabricate: no invented references or DOIs, search results, PRISMA counts, matrix cells, findings or quotes. If a fix needs real research or data the student has not supplied, leave a `% TODO(student): …` marker and say what is needed. Never overwrite the student's original files.
 
 ## How to phrase one suggestion
 `[ID] where (file:line / section) → action → how to verify`. One action per suggestion, imperative, concrete. Say what is *missing or wrong*, not how it should read. Mark effort: quick (<10 min) / medium / heavy (needs more reading or searching).

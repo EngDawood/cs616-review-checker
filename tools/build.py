@@ -15,7 +15,7 @@ TOPICS = {
 SKILL = '''---
 name: cs616-review-checker
 description: >-
-  Checks a CS 616 (Digital Crime and Forensics) Type A review/survey paper written in IEEE LaTeX (Overleaf) against the course Guidelines and the Handbook entry of ONE topic - Topic 19 "Version- and State-Robust Forensics of Encrypted Messaging Applications" or Topic 34 "Forensic Readiness and Standardisation in Organisations". Use when the user asks to verify, audit or pre-check such a paper (e.g. "check my Topic 19 paper", "راجع البيبر حق Topic 34", "هل البحث مطابق للمتطلبات"). Not for other topics, not for Type B experimental papers; it never writes or rewrites paper text.
+  Checks a CS 616 (Digital Crime and Forensics) Type A review/survey paper written in IEEE LaTeX (Overleaf) against the course Guidelines and the Handbook entry of ONE topic - Topic 19 "Version- and State-Robust Forensics of Encrypted Messaging Applications" or Topic 34 "Forensic Readiness and Standardisation in Organisations". Use when the user asks to verify, audit or pre-check such a paper (e.g. "check my Topic 19 paper", "راجع البيبر حق Topic 34", "هل البحث مطابق للمتطلبات"). Also revises the paper on request (fix mode: edits a copy of the .tex to correct what the check found). Not for other topics, not for Type B experimental papers.
 ---
 
 # CS 616 · Type A review-paper compliance checker
@@ -33,7 +33,7 @@ Topic comes from the command used (`/check-t19`, `/check-t34`), the user's words
 **Never open the other topic's folder** and never apply its requirements, even if the two sound similar. Shared rules live in `references/common/`.
 
 ## Ground rules
-1. **Audit only — never write the paper.** The course treats AI-written text as an integrity violation. Report *what* is wrong and *where*; do not supply replacement sentences, paragraphs, abstracts, search strings, table contents or invented references.
+1. **Two modes.** *Check* (default): report what is wrong and where, with How-to-fix directions. *Fix* (when the student asks to edit/fix/revise/complete — `/fix-t19`, `/fix-t34`, "عدّل", "أصلح"): edit a **copy** of the paper (never the original) to correct what the report found, then deliver the revised files plus a change log. Fix mode may repair format, structure, labels/citations, acronyms, tone, and may rewrite or complete weak/missing passages from material the student gave or the paper already contains. **Never fabricate**: no invented references/DOIs, search results, PRISMA counts, matrix cells, findings or quotes. Where real research or data is needed, insert a clearly marked `% TODO(student): …` placeholder and tell the student what to supply. Add one line to the change log: Guidelines §6 treats AI-generated text submitted as one's own as an integrity violation, so the student must review, own and understand every change and follow the instructor's policy.
 2. **Report in the student's language** (Arabic if they write Arabic). Keep requirement IDs, quoted requirements and section names in English.
 3. **Evidence over opinion.** Every FAIL/WARN cites a file:line, a number, or the exact requirement and its source (Guidelines §… / Handbook Topic N).
 4. **The script is a heuristic.** Verify each WARN/FAIL by reading the .tex before reporting; say when you judge one a false positive.
@@ -57,7 +57,8 @@ Topic comes from the command used (`/check-t19`, `/check-t34`), the user's words
    - Conclusion: nothing new; future work?
    - Tone: formal third person; topic sentences; acronyms defined.
 4. **Compose the report** with `references/common/report-template.md`; give every FAIL/WARN/NOT MET/PARTLY a **How to fix** direction from `references/common/revision-guidance.md` (directions only, never replacement text). Include: verdict (READY / NOT READY — rule in the rubric), blocking FAILs, WARNs, the judgement table (J-items + topic items), MANUAL items, what passes, revision plan, section word-count table.
-5. **Offer a re-check** after fixes. If the student asks "how do I fix X?" or for a revision plan, answer from `revision-guidance.md` (what to change, where, how to verify, in the suggested order) and still do not write the text for them.
+5. **Offer** a revision (fix mode) and a re-check. If the student asks "how do I fix X?" or for a revision plan, answer from `references/common/revision-guidance.md`.
+6. **Fix mode** (only when asked): copy the source to a working folder; fix blocking FAILs first, then the order in `revision-guidance.md`; keep the IEEE template intact; compile-check labels/refs; re-run the engine on the revised copy and show before/after counts; deliver the revised `.tex`/`.bib` (or zip) and `CHANGES.md` listing every edit (ID, location, what changed) and every `TODO(student)` left. Do not claim the revised paper is ready until the MANUAL items are done.
 
 ## Always list as MANUAL
 Similarity < 20 % (Turnitin/SafeAssign) · no AI-generated text / the instructor's permitted-use policy · sources really read, nothing fabricated · venue quality (Q1/Q2, CORE A/B, Scopus/WoS, no predatory venues) · table values faithful to sources · topic locked with the instructor, no self-plagiarism.
@@ -81,7 +82,16 @@ argument-hint: <path to Overleaf .zip | folder | main.tex> [--stage draft|final]
 
 Use the `cs616-review-checker` skill with **topic {n}** (load only `references/topics/t{n}/`) on: $ARGUMENTS
 
-Run the engine with `--topic {n}`, read the paper section by section, verify every WARN/FAIL, and return the compliance report from the template. Audit only — do not rewrite any of the paper's text. If no path is given, ask for the Overleaf source (.zip) or `main.tex` + `.bib`.
+Run the engine with `--topic {n}`, read the paper section by section, verify every WARN/FAIL, and return the compliance report from the template. Check mode only (no edits); if the student wants fixes applied, point to /fix-t{n}. If no path is given, ask for the Overleaf source (.zip) or `main.tex` + `.bib`.
+'''
+
+FIXCMD = '''---
+description: Revise a Topic {n} review paper ({title}) - fix what the CS 616 check found
+argument-hint: <path to Overleaf .zip | folder | main.tex> [--stage draft|final]
+---
+
+Use the `cs616-review-checker` skill in **fix mode** with **topic {n}** (load only `references/topics/t{n}/`) on: $ARGUMENTS
+Run the check first, then edit a copy of the paper, never fabricate references/data (use TODO(student) placeholders), re-run the engine, and deliver the revised files with CHANGES.md.
 '''
 
 def w(path, text):
@@ -110,6 +120,7 @@ def build():
         m = re.search(r"\n#{2,3} Topic %s .*?(?=\n#{2,3} Topic \d+ |\Z)" % n, hb, re.S)
         w(os.path.join(d, "handbook-excerpt.md"), (head + "\n\n" + m.group(0)).replace("all 28 topics", "excerpt: Review-track standard + Topic %s only" % n))
         w(os.path.join(pdir, "commands", t["cmd"] + ".md"), CMD.format(n=n, title=t["title"]))
+        w(os.path.join(pdir, "commands", "fix-t%s.md" % n), FIXCMD.format(n=n, title=t["title"]))
     w(os.path.join(pdir, ".claude-plugin", "plugin.json"), json.dumps({
         "name": NAME, "version": VERSION,
         "description": "CS 616 Type A review-paper checker for Topic 19 (encrypted messaging apps forensics) and Topic 34 (forensic readiness); one topic per run",

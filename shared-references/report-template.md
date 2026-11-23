@@ -1,7 +1,7 @@
 # Report template (what the reviewer returns)
 
 Write the report in the student's language (Arabic if the student writes Arabic; keep IDs, section names and requirement quotes in English).
-Never include rewritten paper text, suggested sentences or "improved" paragraphs — the course forbids AI-written submissions. Point to **where** and **what** to fix, nothing more.
+In check mode point to **where** and **what** to fix; rewrite or complete text only in fix mode (see the skill), and never invent references, numbers or findings.
 
 ```
 # Compliance report — <topic title>   (stage: draft | final)

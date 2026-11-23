@@ -23,7 +23,7 @@ Everything is derived from the three course PDFs (extracted to Markdown in [`sou
 
 Full ID-by-ID list: [`shared-references/requirements-common.md`](shared-references/requirements-common.md).
 
-> **Audit only.** The course forbids AI-generated text, so the checker points to *what* and *where* to fix — it never rewrites or drafts paper text.
+> **Two modes.** `/check-t19` · `/check-t34` audit the paper and say what and where to fix. `/fix-t19` · `/fix-t34` revise a copy of the paper and return the edited files plus a change log. Fix mode never invents references, numbers or findings; it leaves `TODO(student)` markers instead. Guidelines §6 treats AI-generated text submitted as one's own as an integrity violation, so the student must review and own every change.
 
 ## Install
 **Claude Code**
