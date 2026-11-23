@@ -102,12 +102,12 @@ def build():
         shutil.copy(os.path.join(ROOT, "shared-references", f), common)
     shutil.copy(os.path.join(ROOT, "source-docs", "01-research-paper-guidelines.md"), os.path.join(common, "guidelines.md"))
     hb = open(os.path.join(ROOT, "source-docs", "03-two-track-handbook-full.md"), encoding="utf-8").read()
-    head = hb[:hb.index("\n## Topic 1 ")]
+    head = hb[:re.search(r"\n#{2,3} Topic 1 ", hb).start()]
     for n, t in TOPICS.items():
         d = os.path.join(sk, "references", "topics", "t" + n); os.makedirs(d)
         shutil.copy(os.path.join(ROOT, "topic-specs", "topic-%s.md" % n), d)
-        m = re.search(r"\n## Topic %s .*?(?=\n## Topic \d+ |\Z)" % n, hb, re.S)
-        w(os.path.join(d, "handbook-excerpt.md"), (head + "\n\n" + m.group(0)).replace("(all topics)", "(excerpt: Review track standard + Topic %s)" % n))
+        m = re.search(r"\n#{2,3} Topic %s .*?(?=\n#{2,3} Topic \d+ |\Z)" % n, hb, re.S)
+        w(os.path.join(d, "handbook-excerpt.md"), (head + "\n\n" + m.group(0)).replace("all 28 topics", "excerpt: Review-track standard + Topic %s only" % n))
         w(os.path.join(pdir, "commands", t["cmd"] + ".md"), CMD.format(n=n, title=t["title"]))
     w(os.path.join(pdir, ".claude-plugin", "plugin.json"), json.dumps({
         "name": NAME, "version": VERSION,
