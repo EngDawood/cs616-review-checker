@@ -1,0 +1,23 @@
+{
+  "name": "cs616-review-checkers",
+  "owner": {
+    "name": "EngDawood"
+  },
+  "metadata": {
+    "description": "CS 616 Digital Crime and Forensics - Type A review-paper checkers, one plugin per topic"
+  },
+  "plugins": [
+    {
+      "name": "cs616-t19-review-checker",
+      "source": "./plugins/cs616-t19-review-checker",
+      "description": "Topic 19 only - Version- and State-Robust Forensics of Encrypted Messaging Applications",
+      "version": "1.0.0"
+    },
+    {
+      "name": "cs616-t34-review-checker",
+      "source": "./plugins/cs616-t34-review-checker",
+      "description": "Topic 34 only - Forensic Readiness and Standardisation in Organisations",
+      "version": "1.0.0"
+    }
+  ]
+}
