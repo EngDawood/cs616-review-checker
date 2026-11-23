@@ -41,10 +41,10 @@ class T(unittest.TestCase):
         d, _ = run(z, "34"); self.assertEqual(d["meta"]["main_file"], "main.tex")
     def test_plugin_copy_matches_engine(self):
         h = lambda p: hashlib.sha256(open(p, "rb").read()).hexdigest()
-        p = os.path.join(ROOT, "plugins", "cs616-review-checker", "skills", "cs616-review-checker", "scripts", "check_paper.py")
+        p = os.path.join(ROOT, "skills", "cs616-review-checker", "scripts", "check_paper.py")
         self.assertEqual(h(p), h(ENGINE), "run python3 tools/build.py")
     def test_topic_folders_are_separate(self):
-        base = os.path.join(ROOT, "plugins", "cs616-review-checker", "skills", "cs616-review-checker", "references", "topics")
+        base = os.path.join(ROOT, "skills", "cs616-review-checker", "references", "topics")
         for a, b in (("19", "34"), ("34", "19")):
             for dp, _, fn in os.walk(os.path.join(base, "t" + a)):
                 for f in fn:

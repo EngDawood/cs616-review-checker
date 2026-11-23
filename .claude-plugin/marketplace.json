@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "cs616-review-checker",
-      "source": "./plugins/cs616-review-checker",
+      "source": "./",
       "version": "1.1.0",
       "description": "Topic 19 and Topic 34 review-paper checker (one topic per run)"
     }

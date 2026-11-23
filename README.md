@@ -28,7 +28,7 @@ Full ID-by-ID list: [`shared-references/requirements-common.md`](shared-referenc
 ## Install
 **Claude Code**
 ```
-/plugin marketplace add EngDawood/cs616-t19-review-checker   # repo name kept; contains both topics
+/plugin marketplace add EngDawood/cs616-review-checker
 /plugin install cs616-review-checker@cs616-review-checkers
 /check-t19 paper.zip        # or /check-t34 paper.zip
 ```
@@ -51,10 +51,10 @@ engine/check_paper.py        single source of the checker (both topic profiles)
 shared-references/           common requirements + report template
 topic-specs/                 Handbook entry + checks for topic 19 and 34
 source-docs/                 course PDFs extracted to Markdown
-plugins/cs616-review-checker built plugin (skill + references/common + references/topics/t19|t34)
+skills/ + commands/          generated plugin parts (the repo root is the plugin; installs copy everything)
 dist/                        skill zip for claude.ai
 templates/                   official IEEE conference template (Overleaf) for students
-tools/build.py               rebuild plugins + zips after editing engine/ or references
+tools/build.py               rebuild skills/, commands/ + zip after editing engine/ or references
 tests/                       python3 -m unittest discover -s tests
 ```
 After editing anything under `engine/`, `shared-references/` or `topic-specs/`, run `python3 tools/build.py` (a test fails if the plugin copies drift).

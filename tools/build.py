@@ -89,9 +89,9 @@ def w(path, text):
     open(path, "w", encoding="utf-8").write(text)
 
 def build():
-    pdir = os.path.join(ROOT, "plugins", NAME)
-    for old in os.listdir(os.path.join(ROOT, "plugins")) if os.path.isdir(os.path.join(ROOT, "plugins")) else []:
-        shutil.rmtree(os.path.join(ROOT, "plugins", old))
+    pdir = ROOT  # the repo root IS the plugin, so installs copy everything
+    for old in ("plugins", "skills", "commands"):
+        shutil.rmtree(os.path.join(ROOT, old), ignore_errors=True)
     sk = os.path.join(pdir, "skills", NAME)
     w(os.path.join(sk, "SKILL.md"), SKILL.replace("\\\\", "\\"))
     os.makedirs(os.path.join(sk, "scripts"))
@@ -118,7 +118,7 @@ def build():
     w(os.path.join(ROOT, ".claude-plugin", "marketplace.json"), json.dumps({
         "name": "cs616-review-checkers", "owner": {"name": "EngDawood"},
         "metadata": {"description": "CS 616 Digital Crime and Forensics - Type A review-paper checker"},
-        "plugins": [{"name": NAME, "source": "./plugins/" + NAME, "version": VERSION,
+        "plugins": [{"name": NAME, "source": "./", "version": VERSION,
                      "description": "Topic 19 and Topic 34 review-paper checker (one topic per run)"}]}, indent=2) + "\n")
     shutil.rmtree(os.path.join(ROOT, "dist"), ignore_errors=True); os.makedirs(os.path.join(ROOT, "dist"))
     with zipfile.ZipFile(os.path.join(ROOT, "dist", NAME + ".skill.zip"), "w", zipfile.ZIP_DEFLATED) as z:
