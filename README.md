@@ -1,13 +1,15 @@
-# cs616-t19-review-checker
+# cs616-review-checker
 
-Claude plugins that check a **CS 616 (Digital Crime and Forensics) Type A — Review / Survey paper** against *every* requirement in the course documents, for **one topic each**. Feed Claude the paper's **Overleaf LaTeX source**; get back a compliance report (PASS / WARN / FAIL / MANUAL) with evidence and a fix order.
+A Claude plugin that checks a **CS 616 (Digital Crime and Forensics) Type A — Review / Survey paper** against *every* requirement in the course documents, for **Topic 19 or Topic 34**. Feed Claude the paper's **Overleaf LaTeX source**; get back a compliance report (PASS / WARN / FAIL / MANUAL) with evidence and a fix order.
 
-| Plugin | Topic | Invoke |
+One plugin, one skill, **one topic per run**. Each topic has its own reference sub-folder; the skill loads only the folder of the chosen topic and never opens the other.
+
+| Topic | Command | Reference folder |
 |---|---|---|
-| `cs616-t19-review-checker` | **Topic 19** — Version- and State-Robust Forensics of Encrypted Messaging Applications | `/check-t19` or ask about Topic 19 |
-| `cs616-t34-review-checker` | **Topic 34** — Forensic Readiness and Standardisation in Organisations | `/check-t34` or ask about Topic 34 |
+| **19** — Version- and State-Robust Forensics of Encrypted Messaging Applications | `/check-t19` | `references/topics/t19/` |
+| **34** — Forensic Readiness and Standardisation in Organisations | `/check-t34` | `references/topics/t34/` |
 
-The two plugins are fully separate: install one, the other, or both. Each loads only its own topic's requirements.
+Shared rules (all Type A requirements, report template, Guidelines) are in `references/common/`.
 
 ## What is checked
 Everything is derived from the three course PDFs (extracted to Markdown in [`source-docs/`](source-docs/)):
@@ -26,11 +28,11 @@ Full ID-by-ID list: [`shared-references/requirements-common.md`](shared-referenc
 ## Install
 **Claude Code**
 ```
-/plugin marketplace add EngDawood/cs616-t19-review-checker
-/plugin install cs616-t19-review-checker@cs616-review-checkers      # Topic 19
-/plugin install cs616-t34-review-checker@cs616-review-checkers      # Topic 34
+/plugin marketplace add EngDawood/cs616-t19-review-checker   # repo name kept; contains both topics
+/plugin install cs616-review-checker@cs616-review-checkers
+/check-t19 paper.zip        # or /check-t34 paper.zip
 ```
-**Claude app / claude.ai** — upload the skill zip from [`dist/`](dist/) as a custom skill (`t19-review-checker.skill.zip` or `t34-review-checker.skill.zip`).
+**Claude app / claude.ai** — upload [`dist/cs616-review-checker.skill.zip`](dist/cs616-review-checker.skill.zip) as a custom skill, then say which topic (19 or 34) when you attach the paper.
 
 ## Use
 1. In Overleaf: *Menu → Download → Source* (a `.zip`), or attach `main.tex` + `.bib`.
@@ -49,8 +51,9 @@ engine/check_paper.py        single source of the checker (both topic profiles)
 shared-references/           common requirements + report template
 topic-specs/                 Handbook entry + checks for topic 19 and 34
 source-docs/                 course PDFs extracted to Markdown
-plugins/                     built, self-contained plugins (one per topic)
-dist/                        skill zips for claude.ai
+plugins/cs616-review-checker built plugin (skill + references/common + references/topics/t19|t34)
+dist/                        skill zip for claude.ai
+templates/                   official IEEE conference template (Overleaf) for students
 tools/build.py               rebuild plugins + zips after editing engine/ or references
 tests/                       python3 -m unittest discover -s tests
 ```

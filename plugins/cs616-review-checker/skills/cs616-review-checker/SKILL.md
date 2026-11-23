@@ -1,0 +1,60 @@
+---
+name: cs616-review-checker
+description: >-
+  Checks a CS 616 (Digital Crime and Forensics) Type A review/survey paper written in IEEE LaTeX (Overleaf) against the course Guidelines and the Handbook entry of ONE topic - Topic 19 "Version- and State-Robust Forensics of Encrypted Messaging Applications" or Topic 34 "Forensic Readiness and Standardisation in Organisations". Use when the user asks to verify, audit or pre-check such a paper (e.g. "check my Topic 19 paper", "راجع البيبر حق Topic 34", "هل البحث مطابق للمتطلبات"). Not for other topics, not for Type B experimental papers; it never writes or rewrites paper text.
+---
+
+# CS 616 · Type A review-paper compliance checker
+
+Scope: **Type A review (survey) paper**, **Topic 19** or **Topic 34** — one topic per run. Anything else (another topic number, an implementation/experimental paper): stop and say this checker does not apply.
+
+## Step 0 — fix the topic, then load ONLY that topic's folder
+Topic comes from the command used (`/check-t19`, `/check-t34`), the user's words, or the paper's `\title`. If unclear, ask once.
+
+| Topic | Title | Load only |
+|---|---|---|
+| 19 | Version- and State-Robust Forensics of Encrypted Messaging Applications | `references/topics/t19/` |
+| 34 | Forensic Readiness and Standardisation in Organisations | `references/topics/t34/` |
+
+**Never open the other topic's folder** and never apply its requirements, even if the two sound similar. Shared rules live in `references/common/`.
+
+## Ground rules
+1. **Audit only — never write the paper.** The course treats AI-written text as an integrity violation. Report *what* is wrong and *where*; do not supply replacement sentences, paragraphs, abstracts, search strings, table contents or invented references.
+2. **Report in the student's language** (Arabic if they write Arabic). Keep requirement IDs, quoted requirements and section names in English.
+3. **Evidence over opinion.** Every FAIL/WARN cites a file:line, a number, or the exact requirement and its source (Guidelines §… / Handbook Topic N).
+4. **The script is a heuristic.** Verify each WARN/FAIL by reading the .tex before reporting; say when you judge one a false positive.
+5. If the instructor's instructions differ from the PDFs (word count, AI policy, deadlines), the instructor wins — flag it.
+
+## Workflow
+1. **Get the paper.** Prefer the Overleaf source: a `.zip` ("Download source"), a folder, or `main.tex` (+ `.bib`). If only a PDF exists, extract with `pdftotext`, do the manual/judgement parts, and say automatic checks (template, labels, citations) were not possible.
+2. **Run the engine** (stdlib Python 3, no installs):
+   ```
+   python3 scripts/check_paper.py <zip|folder|main.tex> --topic <19|34> --format json --out /tmp/report.json
+   python3 scripts/check_paper.py <path> --topic <19|34>        # readable table
+   ```
+   `--stage draft` for the Week-9 draft (length/ref-count FAILs become WARN); default `final` (Week 13). `--main <file>` if auto-detect picks the wrong main file. Exit code 1 = at least one FAIL.
+3. **Read the paper** (`main.tex` + `\input` files) section by section and judge what no script can, using `references/common/requirements-common.md` and `references/topics/tN/topic-N.md`:
+   - Abstract: problem, approach, single key finding?
+   - Introduction: context/why it matters, problem, RQs, contribution, one-sentence organisation?
+   - Related work: grouped by theme and critiqued — or a list of summaries? Ends with the gap?
+   - Methodology: reproducible (databases, exact strings, window, inclusion/exclusion, PRISMA numbers, appraisal rubric, corpus size justified)?
+   - Analysis: taxonomy + comparison matrix with the topic's columns, consistent with the cited studies (spot-check 3–5 rows if sources are accessible)?
+   - Results/Discussion: RQ1–RQ3 each answered explicitly? Anticipated vs actual outcomes? Compared with prior reviews? Limitations incl. review bias?
+   - Conclusion: nothing new; future work?
+   - Tone: formal third person; topic sentences; acronyms defined.
+4. **Compose the report** with `references/common/report-template.md`: verdict (READY / NOT READY), blocking FAILs, WARNs, MANUAL items, what passes, judgement calls, fix order, section word-count table.
+5. **Offer a re-check** after fixes.
+
+## Always list as MANUAL
+Similarity < 20 % (Turnitin/SafeAssign) · no AI-generated text / the instructor's permitted-use policy · sources really read, nothing fabricated · venue quality (Q1/Q2, CORE A/B, Scopus/WoS, no predatory venues) · table values faithful to sources · topic locked with the instructor, no self-plagiarism.
+
+## Mention once, if relevant
+- Topic Catalogue: proposal Week 4; Guidelines: Week 8.
+- Catalogue and Handbook titles of the topic differ; the Handbook is the detailed spec; renaming/narrowing needs the instructor's agreement.
+- Word count is approximate (prose only); confirm with Overleaf Word Count and the instructor's exact limit.
+- An unmodified IEEE sample template is reported as F3 (leftover template text) — expected until the student replaces it.
+
+## Files
+- `scripts/check_paper.py` — the engine (`--topic` selects the profile).
+- `references/common/` — `requirements-common.md` (every Type A requirement with check IDs + sources), `report-template.md`, `guidelines.md` (course Guidelines as Markdown).
+- `references/topics/t19/` and `references/topics/t34/` — each: `topic-N.md` (Handbook Track A + what is checked) and `handbook-excerpt.md` (Review-track standard + that topic's entry).

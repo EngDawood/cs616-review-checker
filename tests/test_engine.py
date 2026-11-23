@@ -39,10 +39,20 @@ class T(unittest.TestCase):
     def test_zip_input(self):
         import shutil; z = shutil.make_archive(os.path.join(self.tmp, "z"), "zip", os.path.join(self.tmp, "t34"))
         d, _ = run(z, "34"); self.assertEqual(d["meta"]["main_file"], "main.tex")
-    def test_plugin_copies_match_engine(self):
-        h = lambda p: hashlib.sha256(open(p, "rb").read()).hexdigest() if True else None
-        for s in ("t19", "t34"):
-            p = os.path.join(ROOT, "plugins", "cs616-%s-review-checker" % s, "skills", "%s-review-checker" % s, "scripts", "check_paper.py")
-            self.assertEqual(h(p), h(ENGINE), "run python3 tools/build.py")
+    def test_plugin_copy_matches_engine(self):
+        h = lambda p: hashlib.sha256(open(p, "rb").read()).hexdigest()
+        p = os.path.join(ROOT, "plugins", "cs616-review-checker", "skills", "cs616-review-checker", "scripts", "check_paper.py")
+        self.assertEqual(h(p), h(ENGINE), "run python3 tools/build.py")
+    def test_topic_folders_are_separate(self):
+        base = os.path.join(ROOT, "plugins", "cs616-review-checker", "skills", "cs616-review-checker", "references", "topics")
+        for a, b in (("19", "34"), ("34", "19")):
+            for dp, _, fn in os.walk(os.path.join(base, "t" + a)):
+                for f in fn:
+                    self.assertNotIn("Topic %s " % b, open(os.path.join(dp, f)).read().replace("Topic %s)" % b, ""), f)
+    def test_unmodified_ieee_template_is_flagged(self):
+        import zipfile
+        d = os.path.join(self.tmp, "tpl"); zipfile.ZipFile(os.path.join(ROOT, "templates", "ieee-conference-template.zip")).extractall(d)
+        r, rc = run(d, "19"); st = {f["id"]: f["status"] for f in r["findings"]}
+        self.assertEqual(st["F1"], "PASS"); self.assertEqual(st["F3"], "FAIL"); self.assertEqual(rc, 1)
 if __name__ == "__main__":
     unittest.main()
