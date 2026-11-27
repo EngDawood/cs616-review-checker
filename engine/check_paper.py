@@ -259,9 +259,10 @@ def classify_section(title):
     return "other"
 
 def main():
-    ap = argparse.ArgumentParser(description="CS616 review-paper pre-checker (topic 19 or 34)")
+    ap = argparse.ArgumentParser(description="CS616 review-paper pre-checker (topic 19 or 34, or topic-free 'generic' LaTeX check)")
     ap.add_argument("path", help="Overleaf folder, .zip export, or a .tex file")
-    ap.add_argument("--topic", choices=sorted(PROFILES), required=True, help="19 or 34 - checks ONLY that topic's requirements")
+    ap.add_argument("--topic", choices=sorted(PROFILES) + ["generic"], default="generic",
+                    help="19 or 34 - checks ONLY that topic's requirements; 'generic' (default) = topic-free IEEE/LaTeX check")
     ap.add_argument("--main", help="main .tex file (relative to root) if auto-detect picks the wrong one")
     ap.add_argument("--stage", choices=["draft", "final"], default="final",
                     help="draft (Week 9) downgrades length/reference-count FAILs to WARN")
@@ -279,7 +280,8 @@ def main():
     mainf = find_main_tex(root, a.main)
     lines = expand(mainf, root)
     full = "\n".join(l[2] for l in lines)
-    T = PROFILES[a.topic]; HT = T["h"]
+    GEN = a.topic == "generic"
+    T = dict(PROFILES["19"], name="Generic IEEE LaTeX check (no topic)", h="Guidelines") if GEN else PROFILES[a.topic]; HT = T["h"]
     soft = (lambda s: "WARN" if (a.stage == "draft" and s == "FAIL") else s)
 
     def line_of(pos):
@@ -644,6 +646,29 @@ def main():
         hit = [r for r in rxs if has(r)]
         add(fid, "Topic coverage", "PASS" if len(hit) >= need else ("WARN" if hit else "FAIL"), req, "%d/%d indicators found" % (len(hit), len(rxs)), src)
 
+    # ---- 9b. LaTeX hygiene (topic-independent) ---------------------------------------
+    labs = re.findall(r"\\label\{([^}]+)\}", full)
+    dupl = sorted({l for l in labs if labs.count(l) > 1})
+    add("LX1", "LaTeX hygiene", "FAIL" if dupl else "PASS", "No duplicate \\label keys (wrong cross-references)", ", ".join(dupl) or "none", G + " §10 Proofread",
+        "Rename one of each duplicated label" if dupl else "")
+    gp = re.findall(r"\\graphicspath\{((?:\{[^}]*\})+)\}", full)
+    gdirs = [""] + [d for g in gp for d in re.findall(r"\{([^}]*)\}", g)]
+    miss = []
+    for m in re.finditer(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}", full):
+        f = m.group(1).strip(); ok = False
+        for d in gdirs:
+            base = os.path.join(root, d, f)
+            if os.path.isfile(base) or any(os.path.isfile(base + e) for e in (".pdf", ".png", ".jpg", ".jpeg", ".eps", ".svg")): ok = True; break
+        if not ok: miss.append("%s (%s)" % (f, line_of(m.start())))
+    add("LX2", "LaTeX hygiene", "FAIL" if miss else "PASS", "Every \\includegraphics file exists in the project", "; ".join(miss) or "all found", G + " §3 Figures",
+        "Upload the missing image or fix the path/extension" if miss else "")
+    bal = []
+    for nm in sorted(set(re.findall(r"\\begin\{([^}]+)\}", full)) | set(re.findall(r"\\end\{([^}]+)\}", full))):
+        b, e = len(re.findall(r"\\begin\{%s\}" % re.escape(nm), full)), len(re.findall(r"\\end\{%s\}" % re.escape(nm), full))
+        if b != e: bal.append("%s: %d begin / %d end" % (nm, b, e))
+    add("LX3", "LaTeX hygiene", "FAIL" if bal else "PASS", "Every \\begin{} has a matching \\end{}", "; ".join(bal) or "balanced", "LaTeX",
+        "Add or remove the unmatched \\begin/\\end (the project will not compile cleanly)" if bal else "")
+
     # ---- 10. manual items -----------------------------------------------------------
     for fid, req, src in [
         ("X1", "Similarity index < 20% (Turnitin / SafeAssign) - cannot be measured here", G + " §6 Plagiarism"),
@@ -655,6 +680,13 @@ def main():
     ]:
         add(fid, "Manual", "MANUAL", req, "verify by hand", src)
 
+    if GEN:  # topic-free run: drop everything that needs a topic profile; relax the title match
+        drop_ids = {"M3", "M4", "M5", "FT6"}
+        FINDINGS[:] = [f for f in FINDINGS if f["id"] not in drop_ids and not f["id"].startswith("R12.") and f["category"] != "Topic coverage"]
+        for f in FINDINGS:
+            if f["id"] == "T1" and f["status"] == "WARN": f.update(status="PASS", requirement="Specific, informative title", hint="")
+            elif f["id"] == "T1": f["requirement"] = "Specific, informative title"
+            if f["id"] == "M1": f["requirement"] = f["requirement"].split("; ")[0]
     # ---------------------------------------------------------------------------- output
     summary = OrderedDict((s, sum(1 for f in FINDINGS if f["status"] == s)) for s in ["PASS", "WARN", "FAIL", "MANUAL", "INFO"])
     meta = OrderedDict(main_file=os.path.relpath(mainf, root), stage=a.stage, year=a.year, track="Review (Type A / Track A)", topic=a.topic, topic_name=T["name"],

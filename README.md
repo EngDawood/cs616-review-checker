@@ -23,6 +23,8 @@ Everything is derived from the three course PDFs (extracted to Markdown in [`sou
 
 Full ID-by-ID list: [`shared-references/requirements-common.md`](shared-references/requirements-common.md).
 
+> **`/check-latex`** checks any paper's LaTeX/IEEE format with **no topic** (template, references, figures/tables, labels, missing images, acronyms, tone); CLI: `python3 engine/check_paper.py paper.zip` (`--topic generic` is the default).
+>
 > **Two modes.** `/check-t19` · `/check-t34` audit the paper and say what and where to fix. `/fix-t19` · `/fix-t34` revise a copy of the paper and return the edited files plus a change log; Claude edits whatever the user asks for in the paper (the user's request decides), not only what the check found, at any point in the conversation. Fix mode never invents references, numbers or findings; it leaves `TODO(student)` markers instead.
 
 ## Install
@@ -31,6 +33,7 @@ Full ID-by-ID list: [`shared-references/requirements-common.md`](shared-referenc
 /plugin marketplace add EngDawood/cs616-review-checker
 /plugin install cs616-review-checker@cs616-review-checkers
 /check-t19 paper.zip        # or /check-t34 paper.zip
+/check-latex paper.zip      # no topic: format + LaTeX only
 ```
 **Claude app / claude.ai** — upload [`dist/cs616-review-checker.skill.zip`](dist/cs616-review-checker.skill.zip) as a custom skill, then say which topic (19 or 34) when you attach the paper.
 

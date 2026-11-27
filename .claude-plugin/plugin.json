@@ -1,6 +1,6 @@
 {
   "name": "cs616-review-checker",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "CS 616 Type A review-paper checker for Topic 19 (encrypted messaging apps forensics) and Topic 34 (forensic readiness); one topic per run",
   "author": {
     "name": "EngDawood"

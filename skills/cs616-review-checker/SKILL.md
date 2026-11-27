@@ -1,14 +1,17 @@
 ---
 name: cs616-review-checker
 description: >-
-  Checks a CS 616 (Digital Crime and Forensics) Type A review/survey paper written in IEEE LaTeX (Overleaf) against the course Guidelines and the Handbook entry of ONE topic - Topic 19 "Version- and State-Robust Forensics of Encrypted Messaging Applications" or Topic 34 "Forensic Readiness and Standardisation in Organisations". Use when the user asks to verify, audit or pre-check such a paper (e.g. "check my Topic 19 paper", "راجع البيبر حق Topic 34", "هل البحث مطابق للمتطلبات"). Also revises the paper on request (fix mode: edits a copy of the .tex to correct what the check found or whatever the user asks). Not for other topics, not for Type B experimental papers.
+  Checks a CS 616 (Digital Crime and Forensics) Type A review/survey paper written in IEEE LaTeX (Overleaf) against the course Guidelines and the Handbook entry of ONE topic - Topic 19 "Version- and State-Robust Forensics of Encrypted Messaging Applications" or Topic 34 "Forensic Readiness and Standardisation in Organisations". Use when the user asks to verify, audit or pre-check such a paper (e.g. "check my Topic 19 paper", "راجع البيبر حق Topic 34", "هل البحث مطابق للمتطلبات"). Also runs a topic-free IEEE/LaTeX check (/check-latex) and revises the paper on request (fix mode: edits a copy of the .tex to correct what the check found or whatever the user asks). Not for other topics, not for Type B experimental papers.
 ---
 
 # CS 616 · Type A review-paper compliance checker
 
-Scope: **Type A review (survey) paper**, **Topic 19** or **Topic 34** — one topic per run. Anything else (another topic number, an implementation/experimental paper): stop and say this checker does not apply.
+Scope: **Type A review (survey) paper**, **Topic 19** or **Topic 34** — one topic per run. For topic checks: anything else (another topic number, an implementation/experimental paper) — say the topic check does not apply and offer `/check-latex`.
 
-## Step 0 — fix the topic, then load ONLY that topic's folder
+## Step 0 — choose the run
+**Generic LaTeX check (`/check-latex`, or the user asks to check the LaTeX / IEEE format / compile problems without naming a topic):** do not pick a topic and do not open any `references/topics/` folder. Run `python3 scripts/check_paper.py <path> --topic generic` (the default when `--topic` is omitted), read the .tex only to confirm or dismiss each WARN/FAIL, and report: template and layout, title/abstract/keywords, length, references (style, citation↔list match, numbering, completeness), figures/tables (captions, labels, refs), acronyms, tone, and the LaTeX-hygiene items (duplicate labels, missing images, unbalanced environments). Skip the J-rubric and every topic requirement; say the paper was not checked against any topic. If the user later names Topic 19 or 34, rerun with that topic. The fix-mode rules below apply here too.
+
+**Topic check (everything else):** fix the topic, then load ONLY that topic's folder.
 Topic comes from the command used (`/check-t19`, `/check-t34`), the user's words, or the paper's `\title`. If unclear, ask once.
 
 | Topic | Title | Load only |

@@ -36,6 +36,27 @@ class T(unittest.TestCase):
         self.assertEqual(rc, 1); self.assertGreater(d["summary"]["FAIL"], 15)
         ids = {f["id"] for f in d["findings"] if f["status"] == "FAIL"}
         for need in ("F1", "F3", "T1", "A1", "K1", "R3", "FT3"): self.assertIn(need, ids)
+    def test_generic_mode_is_topic_free(self):
+        for tp in ("t19", "t34"):
+            d, _ = run(os.path.join(self.tmp, tp), "generic")
+            ids = {f["id"] for f in d["findings"]}
+            self.assertFalse(ids & {"M3", "M4", "M5", "FT6"}); self.assertFalse([i for i in ids if i.startswith("R12.")])
+            self.assertNotIn("Topic coverage", {f["category"] for f in d["findings"]})
+            self.assertEqual(next(f["status"] for f in d["findings"] if f["id"] == "T1"), "PASS")
+        r = subprocess.run([sys.executable, ENGINE, os.path.join(self.tmp, "t19"), "--format", "json"], capture_output=True, text=True)
+        self.assertEqual(json.loads(r.stdout)["meta"]["topic"], "generic")  # --topic is optional
+    def test_latex_hygiene_checks(self):
+        d0 = os.path.join(self.tmp, "hyg"); os.makedirs(d0)
+        open(os.path.join(d0, "main.tex"), "w").write(r"""\documentclass[conference]{IEEEtran}
+\begin{document}\title{A Clear Title}\maketitle
+\section{A}\label{s:a} \section{B}\label{s:a}
+\begin{figure}\includegraphics{missing}\caption{x}\label{f:x}\end{figure}
+\begin{itemize}\item x
+\end{document}""")
+        d, _ = run(d0, "generic"); st = {f["id"]: f["status"] for f in d["findings"]}
+        for k in ("LX1", "LX2", "LX3"): self.assertEqual(st[k], "FAIL", k)
+        d, _ = run(os.path.join(self.tmp, "t19"), "generic"); st = {f["id"]: f["status"] for f in d["findings"]}
+        for k in ("LX1", "LX2", "LX3"): self.assertEqual(st[k], "PASS", k)
     def test_zip_input(self):
         import shutil; z = shutil.make_archive(os.path.join(self.tmp, "z"), "zip", os.path.join(self.tmp, "t34"))
         d, _ = run(z, "34"); self.assertEqual(d["meta"]["main_file"], "main.tex")

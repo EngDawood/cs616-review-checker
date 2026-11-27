@@ -5,7 +5,7 @@ Run from the repo root:  python3 tools/build.py
 import json, os, re, shutil, zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VERSION = "1.2.1"
+VERSION = "1.3.0"
 NAME = "cs616-review-checker"
 TOPICS = {
   "19": dict(title="Version- and State-Robust Forensics of Encrypted Messaging Applications", cmd="check-t19"),
@@ -15,14 +15,17 @@ TOPICS = {
 SKILL = '''---
 name: cs616-review-checker
 description: >-
-  Checks a CS 616 (Digital Crime and Forensics) Type A review/survey paper written in IEEE LaTeX (Overleaf) against the course Guidelines and the Handbook entry of ONE topic - Topic 19 "Version- and State-Robust Forensics of Encrypted Messaging Applications" or Topic 34 "Forensic Readiness and Standardisation in Organisations". Use when the user asks to verify, audit or pre-check such a paper (e.g. "check my Topic 19 paper", "راجع البيبر حق Topic 34", "هل البحث مطابق للمتطلبات"). Also revises the paper on request (fix mode: edits a copy of the .tex to correct what the check found or whatever the user asks). Not for other topics, not for Type B experimental papers.
+  Checks a CS 616 (Digital Crime and Forensics) Type A review/survey paper written in IEEE LaTeX (Overleaf) against the course Guidelines and the Handbook entry of ONE topic - Topic 19 "Version- and State-Robust Forensics of Encrypted Messaging Applications" or Topic 34 "Forensic Readiness and Standardisation in Organisations". Use when the user asks to verify, audit or pre-check such a paper (e.g. "check my Topic 19 paper", "راجع البيبر حق Topic 34", "هل البحث مطابق للمتطلبات"). Also runs a topic-free IEEE/LaTeX check (/check-latex) and revises the paper on request (fix mode: edits a copy of the .tex to correct what the check found or whatever the user asks). Not for other topics, not for Type B experimental papers.
 ---
 
 # CS 616 · Type A review-paper compliance checker
 
-Scope: **Type A review (survey) paper**, **Topic 19** or **Topic 34** — one topic per run. Anything else (another topic number, an implementation/experimental paper): stop and say this checker does not apply.
+Scope: **Type A review (survey) paper**, **Topic 19** or **Topic 34** — one topic per run. For topic checks: anything else (another topic number, an implementation/experimental paper) — say the topic check does not apply and offer `/check-latex`.
 
-## Step 0 — fix the topic, then load ONLY that topic's folder
+## Step 0 — choose the run
+**Generic LaTeX check (`/check-latex`, or the user asks to check the LaTeX / IEEE format / compile problems without naming a topic):** do not pick a topic and do not open any `references/topics/` folder. Run `python3 scripts/check_paper.py <path> --topic generic` (the default when `--topic` is omitted), read the .tex only to confirm or dismiss each WARN/FAIL, and report: template and layout, title/abstract/keywords, length, references (style, citation↔list match, numbering, completeness), figures/tables (captions, labels, refs), acronyms, tone, and the LaTeX-hygiene items (duplicate labels, missing images, unbalanced environments). Skip the J-rubric and every topic requirement; say the paper was not checked against any topic. If the user later names Topic 19 or 34, rerun with that topic. The fix-mode rules below apply here too.
+
+**Topic check (everything else):** fix the topic, then load ONLY that topic's folder.
 Topic comes from the command used (`/check-t19`, `/check-t34`), the user's words, or the paper's `\\title`. If unclear, ask once.
 
 | Topic | Title | Load only |
@@ -85,6 +88,16 @@ Use the `cs616-review-checker` skill with **topic {n}** (load only `references/t
 Run the engine with `--topic {n}`, read the paper section by section, verify every WARN/FAIL, and return the compliance report from the template. Report only; make no edits unless the user asks for a change — then switch to fix mode (same as /fix-t{n}) and do exactly what they ask. If no path is given, ask for the Overleaf source (.zip) or `main.tex` + `.bib`.
 '''
 
+LATEXCMD = '''---
+description: Check any paper's LaTeX / IEEE format with no topic (template, references, figures, labels, acronyms, tone)
+argument-hint: <path to Overleaf .zip | folder | main.tex> [--stage draft|final]
+---
+
+Use the `cs616-review-checker` skill in **generic LaTeX mode** (no topic; do not open `references/topics/`) on: $ARGUMENTS
+
+Run the engine with `--topic generic`, verify every WARN/FAIL by reading the .tex, and report using the template without the judgement table. Make no edits unless the user asks for a change — then switch to fix mode and do exactly what they ask.
+'''
+
 FIXCMD = '''---
 description: Revise a Topic {n} review paper ({title}) - fix what the CS 616 check found
 argument-hint: <path to Overleaf .zip | folder | main.tex> [--stage draft|final]
@@ -121,6 +134,7 @@ def build():
         w(os.path.join(d, "handbook-excerpt.md"), (head + "\n\n" + m.group(0)).replace("all 28 topics", "excerpt: Review-track standard + Topic %s only" % n))
         w(os.path.join(pdir, "commands", t["cmd"] + ".md"), CMD.format(n=n, title=t["title"]))
         w(os.path.join(pdir, "commands", "fix-t%s.md" % n), FIXCMD.format(n=n, title=t["title"]))
+    w(os.path.join(pdir, "commands", "check-latex.md"), LATEXCMD)
     w(os.path.join(pdir, ".claude-plugin", "plugin.json"), json.dumps({
         "name": NAME, "version": VERSION,
         "description": "CS 616 Type A review-paper checker for Topic 19 (encrypted messaging apps forensics) and Topic 34 (forensic readiness); one topic per run",
